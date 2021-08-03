@@ -28,10 +28,55 @@ void setup() {
   dht.begin();
 }
 
-// define variables
+// Define variables
 int redValue;
 int greenValue;
 int blueValue;
+
+
+// Function to calculate the blue value.
+int redLED(double temp)
+{
+    double y;
+    y = -(temp - 23) + 1;
+
+    if (y > 1 || y < 0){
+      return 0;
+    } else {
+        
+      return round( 255 * y );
+    }
+}
+
+
+// Function to calculate the red value.
+int blueLED(double temp)
+{
+    double y;
+    y = (temp - 23) - 1;
+
+    if (y > 1 || y < 0){
+      return 0;
+    } else {
+        
+      return round( 255 * y );
+    }
+}
+
+// Function to calculate the green value.
+int greenLED(double temp)
+{
+    double y;
+    y = -2 * abs(temp - 24) + 1;
+
+    if (y > 1 || y < 0){
+      return 0;
+    } else {
+        
+      return round( 255 * y );
+    }
+}
+
 
 
 void loop() {
@@ -43,10 +88,20 @@ void loop() {
 
   float tempF = dht.readTemperature(true);
 
+  
   Serial.print("Temperature: ");
   Serial.print(tempC);
   Serial.print("*C ~ ");
+  
+  #define delayTime 100
+  delay(delayTime);
 
+  analogWrite( BLUE, blueLED( tempC ) );
+  analogWrite( GREEN, greenLED( tempC ) );
+  analogWrite( RED, redLED( tempC ) );
+
+  
+  /*
   #define delayTime 10 // fading time between colors
 
   redValue = 255;
@@ -92,7 +147,7 @@ void loop() {
     delay(delayTime);
     
     }
-
-  
+  */
+ 
 
 }
